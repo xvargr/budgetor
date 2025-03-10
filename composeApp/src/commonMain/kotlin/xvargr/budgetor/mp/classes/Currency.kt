@@ -22,16 +22,16 @@ enum class CurrencyFormat(
 }
 
 open class Currency(
-  private var units: Int,
+  private var units: Double,
   private val format: CurrencyFormat,
 ) {
   companion object {
     fun fromString(input: String, format: CurrencyFormat): Currency {
       require(input.count { it == format.decimalSymbol[0] } <= 1) { "Too many decimal points" }
       val intInput = if (format.decimalLocation == 0) {
-        input.split(format.decimalSymbol)[0].toInt()
+        input.split(format.decimalSymbol)[0].toDouble()
       } else {
-        input.replace(format.decimalSymbol, "").toInt()
+        input.replace(format.decimalSymbol, "").toDouble()
       }
       return Currency(intInput, format)
     }
@@ -56,7 +56,7 @@ open class Currency(
     }
   }
 
-  fun replaceUnit(unit: Int): Currency {
+  fun replaceUnit(unit: Double): Currency {
     units = unit
     return this
   }

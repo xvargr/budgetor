@@ -13,17 +13,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import xvargr.budgetor.mp.composable.MainBottomBar
-import xvargr.budgetor.mp.composable.MainTopBar
+import xvargr.budgetor.mp.composables.MainBottomBar
+import xvargr.budgetor.mp.composables.MainTopBar
 import xvargr.budgetor.mp.screens.EditScreen
 import xvargr.budgetor.mp.screens.FaceScreen
 import xvargr.budgetor.mp.screens.HomeScreen
 import xvargr.budgetor.mp.screens.NewExpenseScreen
 import xvargr.budgetor.mp.screens.StarScreen
-import xvargr.budgetor.mp.state.AppState
 
 enum class AppScreen(val title: String) {
-  Home(title = "Budgetor"),
+  Home(title = CommonStrings.APP_NAME),
   NewExpense(title = "New Expense"),
   Favorite(title = "Favorites"),
   Edit(title = "Edit"),
@@ -33,7 +32,7 @@ enum class AppScreen(val title: String) {
 
 @Composable
 fun App(
-  appState: AppState = AppState(),
+//  appState: AppState = AppState,
   navController: NavHostController = rememberNavController(),
 ) {
   val backStackEntry by navController.currentBackStackEntryAsState()

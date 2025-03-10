@@ -1,15 +1,15 @@
 package xvargr.budgetor.mp.classes
 
 enum class ExpenseCategory {
-  Essentials,
+  Needs,
   Wants,
   Savings,
 }
 
 data class Expense(
-  val title: String,
-  val value: Int,
+  val name: String,
+  val price: Currency,
   val category: ExpenseCategory,
-  val description: String = "",
+  val description: String? = "",
 ) {
 }
