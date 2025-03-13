@@ -4,6 +4,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.OffsetMapping
 import androidx.compose.ui.text.input.TransformedText
 import androidx.compose.ui.text.input.VisualTransformation
+import kotlin.math.pow
 
 enum class CurrencySymbolPosition {
   Prefix,
@@ -27,32 +28,35 @@ open class Currency(
 ) {
   companion object {
     fun fromString(input: String, format: CurrencyFormat): Currency {
-      require(input.count { it == format.decimalSymbol[0] } <= 1) { "Too many decimal points" }
-      val intInput = if (format.decimalLocation == 0) {
-        input.split(format.decimalSymbol)[0].toDouble()
+      val cleanedInput = input.replace(format.decimalSymbol, "")
+      val doubleInput = if (format.decimalLocation == 0) {
+        cleanedInput.toDouble()
       } else {
-        input.replace(format.decimalSymbol, "").toDouble()
+        cleanedInput.toDouble() / 10.0.pow(format.decimalLocation)
       }
-      return Currency(intInput, format)
+      return Currency(doubleInput, format)
     }
 
     fun formatString(input: String, fmt: CurrencyFormat): String {
-      val strUnit = input.padStart(fmt.decimalLocation + 1, '0')
-      val decimalSplit = strUnit.count() - fmt.decimalLocation
-      val strRepresentation = StringBuilder()
+      val sanitizedInput = input.trim().filter { it.isDigit() }  // Remove non-digits
+      if (sanitizedInput.isEmpty()) return fmt.symbol + "0"  // Default if empty
 
-      strRepresentation.append(strUnit.substring(0, decimalSplit))
-      if (fmt.decimalLocation != 0) {
-        strRepresentation
-          .append(fmt.decimalSymbol)
-          .append(strUnit.substring(decimalSplit, strUnit.count()))
+      val strUnit = sanitizedInput.padStart(fmt.decimalLocation + 1, '0')
+      val decimalSplit = strUnit.length - fmt.decimalLocation
+      val formatted = buildString {
+        append(strUnit.substring(0, decimalSplit))
+        if (fmt.decimalLocation > 0) {
+          append(fmt.decimalSymbol)
+          append(strUnit.substring(decimalSplit))
+        }
       }
 
       return if (fmt.symbolLocation == CurrencySymbolPosition.Prefix) {
-        "${fmt.symbol}$strRepresentation"
+        "${fmt.symbol}$formatted"
       } else {
-        "$strRepresentation${fmt.symbol}"
+        "$formatted${fmt.symbol}"
       }
+
     }
   }
 
