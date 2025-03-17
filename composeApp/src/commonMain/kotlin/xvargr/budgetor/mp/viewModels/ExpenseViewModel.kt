@@ -33,6 +33,7 @@ class ExpenseViewModel : ViewModel() {
   }
 
   fun addExpense(expense: Expense) {
+    // TODO: Maintain Sort
     when (expense.category) {
       ExpenseCategory.Needs -> {
         _needs.update { curr -> curr + expense }
