@@ -15,10 +15,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import xvargr.budgetor.mp.classes.Expense
-import xvargr.budgetor.mp.classes.ExpenseCategory
 import xvargr.budgetor.mp.composables.Accordion
 import xvargr.budgetor.mp.composables.ExpenseCard
+import xvargr.budgetor.mp.domain.models.Expense
+import xvargr.budgetor.mp.domain.models.ExpenseCategory
 import xvargr.budgetor.mp.viewModels.ExpenseViewModel
 
 @Composable

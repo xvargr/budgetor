@@ -4,16 +4,12 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import xvargr.budgetor.mp.classes.CurrencyFormat
-import xvargr.budgetor.mp.classes.Expense
-import xvargr.budgetor.mp.classes.ExpenseCategory
+import xvargr.budgetor.mp.domain.models.Expense
+import xvargr.budgetor.mp.domain.models.ExpenseCategory
 
 class ExpenseViewModel : ViewModel() {
   private val _newExpenseDialogOpen = MutableStateFlow(false)
   val newExpenseDialogOpen = _newExpenseDialogOpen.asStateFlow()
-
-  private val _currencyFormat = MutableStateFlow(CurrencyFormat.USD)
-  val currencyFormat = _currencyFormat.asStateFlow()
 
   private val _needs = MutableStateFlow<List<Expense>>(mutableListOf())
   val needs = _needs.asStateFlow()

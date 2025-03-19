@@ -5,16 +5,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import xvargr.budgetor.mp.classes.Expense
+import xvargr.budgetor.mp.domain.models.Expense
 
 @Composable
 fun ExpenseCard(
@@ -35,12 +37,15 @@ fun ExpenseCard(
       ) {
         Text(
           text = expense.name,
+          modifier = Modifier.weight(1f),
           fontSize = 15.sp,
+          fontWeight = FontWeight(500),
           overflow = TextOverflow.Ellipsis,
           maxLines = 1,
         )
         Text(
-          text = expense.getDate(),
+          text = "${expense.getTime()} ${expense.getDate()}",
+          modifier = Modifier.wrapContentWidth(),
           fontSize = 15.sp,
           maxLines = 1,
         )

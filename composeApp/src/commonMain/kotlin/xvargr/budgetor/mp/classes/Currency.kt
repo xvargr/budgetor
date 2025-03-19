@@ -23,18 +23,18 @@ enum class CurrencyFormat(
 }
 
 open class Currency(
-  private var units: Double,
+  private var units: Int,
   private val format: CurrencyFormat,
 ) {
   companion object {
     fun fromString(input: String, format: CurrencyFormat): Currency {
       val cleanedInput = input.replace(format.decimalSymbol, "")
-      val doubleInput = if (format.decimalLocation == 0) {
-        cleanedInput.toDouble()
+      val intInput = if (format.decimalLocation == 0) {
+        cleanedInput.toInt()
       } else {
-        cleanedInput.toDouble() / 10.0.pow(format.decimalLocation)
+        cleanedInput.toInt() / 10.0.pow(format.decimalLocation)
       }
-      return Currency(doubleInput, format)
+      return Currency(intInput.toInt(), format)
     }
 
     fun formatString(input: String, fmt: CurrencyFormat): String {
@@ -56,11 +56,14 @@ open class Currency(
       } else {
         "$formatted${fmt.symbol}"
       }
+    }
 
+    fun divide(value: Int, divisor: Int): Int {
+      return (value * 10 / divisor + 5) / 10
     }
   }
 
-  fun replaceUnit(unit: Double): Currency {
+  fun replaceUnit(unit: Int): Currency {
     units = unit
     return this
   }
@@ -74,6 +77,11 @@ open class Currency(
     units += cur.units
     return this
   }
+
+//  fun divide(divisor: Int): Currency {
+//    units = (this.units * 10 / divisor + 5) / 10
+//    return this
+//  }
 
   override fun toString(): String {
     return formatString(units.toString(), format)

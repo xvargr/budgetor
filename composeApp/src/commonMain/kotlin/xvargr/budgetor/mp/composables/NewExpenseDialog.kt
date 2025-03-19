@@ -27,19 +27,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import xvargr.budgetor.mp.classes.Currency
 import xvargr.budgetor.mp.classes.CurrencyVisualTransformation
-import xvargr.budgetor.mp.classes.Expense
-import xvargr.budgetor.mp.classes.ExpenseCategory
+import xvargr.budgetor.mp.domain.models.Expense
+import xvargr.budgetor.mp.domain.models.ExpenseCategory
+import xvargr.budgetor.mp.viewModels.ConfigurationViewModel
 import xvargr.budgetor.mp.viewModels.ExpenseViewModel
 import kotlin.uuid.ExperimentalUuidApi
 
 @Composable
 fun NewExpenseDialog(
   expenseViewModel: ExpenseViewModel,
+  configurationViewModel: ConfigurationViewModel,
   onDismiss: () -> Unit,
 ) {
-  val currencyFormat by expenseViewModel.currencyFormat.collectAsState()
+  val currencyFormat by configurationViewModel.currencyFormat.collectAsState()
   var nameInput by remember { mutableStateOf("") }
   var valueInput by remember { mutableStateOf("") }
+  var descriptionInput by remember { mutableStateOf("") }
   var menuOpen by remember { mutableStateOf(false) }
   var selectedCategory by remember { mutableStateOf<ExpenseCategory?>(null) }
 
@@ -61,11 +64,10 @@ fun NewExpenseDialog(
         ) {
           TextField(
             value = nameInput,
-            onValueChange = {
-              nameInput = it.trim()
-            },
+            onValueChange = { nameInput = it },
             label = { Text("Name") },
-            modifier = Modifier.weight(0.6f)
+            modifier = Modifier.weight(0.6f),
+            maxLines = 1
           )
           TextField(
             value = valueInput,
@@ -78,16 +80,26 @@ fun NewExpenseDialog(
             visualTransformation = CurrencyVisualTransformation(currencyFormat),
             label = { Text("Price") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-            modifier = Modifier.weight(0.4f)
+            modifier = Modifier.weight(0.4f),
+            maxLines = 1
           )
         }
+
+        TextField(
+          value = descriptionInput,
+          onValueChange = { descriptionInput = it },
+          label = { Text("Description") },
+          minLines = 3
+        )
 
         Row(
           modifier = Modifier.fillMaxWidth(),
           verticalAlignment = Alignment.CenterVertically,
           horizontalArrangement = Arrangement.Center
         ) {
-          FilledTonalButton(onClick = { menuOpen = !menuOpen }) {
+          FilledTonalButton(
+            onClick = { menuOpen = !menuOpen },
+          ) {
             Text(selectedCategory?.name ?: "Category")
           }
           DropdownMenu(
@@ -127,11 +139,11 @@ fun NewExpenseDialog(
               selectedCategory?.let {
                 expenseViewModel.addExpense(
                   @OptIn(ExperimentalUuidApi::class)
-                  Expense(
-                    name = nameInput,
+                  (Expense(
+                    name = nameInput.trim(),
                     price = price,
                     category = it,
-                  )
+                  ))
                 )
               }
 
